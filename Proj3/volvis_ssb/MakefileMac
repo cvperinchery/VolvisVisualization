@@ -1,0 +1,27 @@
+CPP = g++
+INC = -I/usr/local/include -I../cryphutil -I../glslutil -I../mvcutil
+C_FLAGS = -fPIC -g -c -DGLFW_INCLUDE_GLEXT -DGLFW_INCLUDE_GLCOREARB $(INC)
+
+LINK = g++ -fPIC -g
+LOCAL_UTIL_LIBRARIES = ../lib/libcryph.so ../lib/libglsl.so ../lib/libmvc.so
+OGL_LIBRARIES = -L/usr/local/lib -lglfw -framework OpenGL
+
+OBJS = main.o VolumeVisualizer.o $(LOCAL_UTIL_LIBRARIES)
+
+main: ${OBJS}
+	${LINK} -o main $(OBJS) $(OGL_LIBRARIES)
+
+../lib/libglsl.so: ../glslutil/ShaderIF.h ../glslutil/ShaderIF.c++
+	(cd ../glslutil; make -f MakefileMac)
+
+../lib/libcryph.so: ../cryphutil/AffPoint.h ../cryphutil/AffPoint.c++
+	(cd ../cryphutil; make)
+
+../lib/libmvc.so: ../mvcutil/Controller.h ../mvcutil/Controller.c++ ../mvcutil/ModelView.h ../mvcutil/ModelView.c++
+	(cd ../mvcutil; make -f MakefileMac)
+
+main.o: main.c++
+	${CPP} ${C_FLAGS} main.c++
+
+VolumeVisualizer.o: VolumeVisualizer.c++
+	${CPP} ${C_FLAGS} VolumeVisualizer.c++

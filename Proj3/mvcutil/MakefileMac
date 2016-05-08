@@ -1,0 +1,29 @@
+CPP = g++
+INC = -I/usr/local/include -I../glslutil -I../cryphutil
+C_FLAGS = -fPIC -O -c $(INC) -DGLFW_INCLUDE_GLEXT -DGLFW_INCLUDE_GLCOREARB
+
+LINK = g++ -fPIC
+
+OBJS = Controller.o GLFWController.o ModelView.o ModelView3D.o BasicShape.o BasicShapeModelView.o
+
+libmvc.so: $(OBJS)
+	$(LINK) -shared -o libmvc.so $(OBJS) -L../lib -lcryph -lglsl -L/usr/local/lib -lglfw -framework OpenGL
+	cp libmvc.so ../lib/
+
+Controller.o: Controller.h Controller.c++
+	$(CPP) $(C_FLAGS) -DGLFW_INCLUDE_GLU Controller.c++
+
+GLFWController.o: GLFWController.h GLFWController.c++
+	$(CPP) $(C_FLAGS) GLFWController.c++
+
+ModelView.o: ModelView.h ModelView.c++
+	$(CPP) $(C_FLAGS) ModelView.c++
+
+ModelView3D.o: ModelView3D.h ModelView3D.c++
+	$(CPP) $(C_FLAGS) ModelView3D.c++
+
+BasicShape.o: BasicShape.h BasicShape.c++
+	$(CPP) $(C_FLAGS) BasicShape.c++
+
+BasicShapeModelView.o: BasicShapeModelView.h BasicShapeModelView.c++
+	$(CPP) $(C_FLAGS) BasicShapeModelView.c++

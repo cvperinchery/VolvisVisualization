@@ -1,0 +1,18 @@
+256 256 256 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/skull.raw
+
+
+256 256 256 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/aneurism.raw
+256 256 178 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/BostonTeapot.raw
+256 256 256 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/bonsai.raw
+256 256 128 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/engine.raw
+256 256 256 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/foot.raw
+64 64 64 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/fuel.raw
+128 128 128 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/hydrogenAtom.raw
+341 341 93 1.0 1.0 4.0 /Users/miller/Data/volvisdata/8bpv/statueLeg.raw
+301 324 56 1.0 1.0 1.4 /Users/miller/Data/volvisdata/8bpv/lobster.raw
+41 41 41 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/marschnerlobb.raw
+64 64 64 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/neghip.raw
+41 41 41 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/nucleon.raw
+64 64 512 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/shockwave.raw
+98 34 34 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/silicium.raw
+256 256 256 1.0 1.0 1.0 /Users/miller/Data/volvisdata/8bpv/skull.raw
