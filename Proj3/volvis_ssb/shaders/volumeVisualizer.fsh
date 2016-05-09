@@ -82,7 +82,7 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 {
 	int ri, ci, si;
 	float rf, cf, sf;
-	float v, maxVal = 0;
+	float v, maxVal, count, total = 0;
 	bool bin = false;
 	vec4 black = vec4(1.0, 1.0, 1.0, 1.0);
 	vec4 white = vec4(0.0, 0.0, 0.0, 1.0);
@@ -90,20 +90,23 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 	while (mcToRCS(mcPoint, ri, rf, ci, cf, si, sf)) //while in the space
 	{
 		v = getVal(ri, rf, ci, cf, si, sf); //get voxel value at stepping point
-		if (rayFunction == 1)
+		if (rayFunction == 1)	// BEGIN BINARY, part 1
 		{
-			// BEGIN BINARY, part 1
 			if(v >= rayFunctionParameter){
 				bin = true;
 				break;
 			}
 		} // END BINARY, part 1
-		else if (rayFunction == 2)
+		else if (rayFunction == 2)	// BEGIN "MAX", part 1
 		{
-			// BEGIN "MAX", part 1
 			if (v > maxVal)
 				maxVal = v;
 			// END "MAX", part 1
+		}
+		else if (rayFunction == 3) // BEGIN AVERAGE, part 1
+		{
+			count ++;
+			total = total +v;
 		}
 		mcPoint += stepSize*mcLineOfSight;
 	}
@@ -116,12 +119,17 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 			colorToReturn = white;
 		}
 	} // END BINARY, part 2
-	else if (rayFunction == 2)
+	else if (rayFunction == 2)	// BEGIN "MAX", part 2
 	{
-		// BEGIN "MAX", part 2
 		v = maxVal / 255.0;
 		colorToReturn = vec4(v, v, v, 1.0);
 		// END "MAX", part 2
+	}
+	else if (rayFunction == 3)
+	{
+		float avg = total / count;
+		avg = avg / 255.0;
+		colorToReturn = vec4(avg, avg, avg, 1.0);
 	}
 	return colorToReturn;
 }
