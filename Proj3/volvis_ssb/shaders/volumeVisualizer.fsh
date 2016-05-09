@@ -103,10 +103,10 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 				maxVal = v;
 			// END "MAX", part 1
 		}
-		else if (rayFunction == 3) // BEGIN AVERAGE, part 1
+		else if (rayFunction == 3 || rayFunction == 4) // BEGIN AVERAGE and SUM, part 1
 		{
 			count ++;
-			total = total +v;
+			total = total + v;
 		}
 		mcPoint += stepSize*mcLineOfSight;
 	}
@@ -130,6 +130,11 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 		float avg = total / count;
 		avg = avg / 255.0;
 		colorToReturn = vec4(avg, avg, avg, 1.0);
+	}
+	else if (rayFunction == 4)
+	{
+		float sum = total /(150*255);
+		colorToReturn = vec4(sum, sum, sum, 1.0);
 	}
 	return colorToReturn;
 }
