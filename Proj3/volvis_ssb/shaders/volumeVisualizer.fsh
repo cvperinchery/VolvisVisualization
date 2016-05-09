@@ -42,6 +42,13 @@ int loc(int r, int c, int s)
 	return s*(nRows*nCols) + c*(nRows) + r;
 }
 
+vec4 transferFunction(in float value)
+{
+
+	vec4 rgba = vec4(value/255.0, value/255.0, value/255.0, value/255.0);
+	return rgba;
+}
+
 float getVal(in int ri, in float rf, in int ci, in float cf, in int si, in float sf)
 {
 	// This should do trilinear interpolation
@@ -83,6 +90,7 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 	int ri, ci, si;
 	float rf, cf, sf;
 	float v, maxVal, count, total = 0;
+	vec4 rgbacur, rgbacum = vec4(0.0, 0.0, 0.0, 0.0);
 	bool bin = false;
 	vec4 black = vec4(1.0, 1.0, 1.0, 1.0);
 	vec4 white = vec4(0.0, 0.0, 0.0, 1.0);
@@ -107,6 +115,11 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 		{
 			count ++;
 			total = total + v;
+		}
+		else if (rayFunction == 5){
+			rgbacur = transferFunction(v);
+			float ads = rgbacur.w * stepSize;
+			rgbacum = rgbacum + (1-rgbacum.w)*ads*rgbacur;
 		}
 		mcPoint += stepSize*mcLineOfSight;
 	}
@@ -135,6 +148,9 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 	{
 		float sum = total /(150*255);
 		colorToReturn = vec4(sum, sum, sum, 1.0);
+	}
+	else if (rayFunction == 5){
+		colorToReturn = rgbacum;// / rgbacum.w;
 	}
 	return colorToReturn;
 }

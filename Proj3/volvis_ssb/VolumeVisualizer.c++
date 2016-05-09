@@ -67,7 +67,7 @@ void VolumeVisualizer::handleCommand(unsigned char key, double ldsX, double ldsY
 {
 	bool handled = false;
 	if (key == 'c'){
-    if(++rayFunction >= 5){
+    if(++rayFunction >= 6){
 			rayFunction = 0;
 		}
 		handled = true;
