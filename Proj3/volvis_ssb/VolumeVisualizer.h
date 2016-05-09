@@ -34,13 +34,14 @@ private:
 	int *attrArray;
 	double xyzMinMax[6];
 	int rayFunction;
+	int rayFunctionParameter;
 	float stepSize;
 
 	// PPUs for voxel grid
 	static GLint ppuLoc_nRows, ppuLoc_nCols, ppuLoc_nSheets;
 	static GLint ppuLoc_cellSizeX, ppuLoc_cellSizeY, ppuLoc_cellSizeZ;
 	// PPUs for rendering options
-	static GLint ppuLoc_rayFunction, ppuLoc_stepSize;
+	static GLint ppuLoc_rayFunction, ppuLoc_rayFunctionParameter, ppuLoc_stepSize;
 
 	static void fetchGLSLVariableLocations();
 

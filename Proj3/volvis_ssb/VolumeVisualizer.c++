@@ -12,6 +12,7 @@ GLint VolumeVisualizer::ppuLoc_cellSizeX = -2;
 GLint VolumeVisualizer::ppuLoc_cellSizeY = -2;
 GLint VolumeVisualizer::ppuLoc_cellSizeZ = -2;
 GLint VolumeVisualizer::ppuLoc_rayFunction = -2;
+GLint VolumeVisualizer::ppuLoc_rayFunctionParameter = -2;
 GLint VolumeVisualizer::ppuLoc_stepSize = -2;
 
 VolumeVisualizer::VolumeVisualizer(int nRowsIn, int nColsIn, int nSheetsIn,
@@ -20,7 +21,7 @@ VolumeVisualizer::VolumeVisualizer(int nRowsIn, int nColsIn, int nSheetsIn,
 		nRows(nRowsIn), nCols(nColsIn), nSheets(nSheetsIn),
 		cellSizeX(colScaleFactor), cellSizeY(rowScaleFactor),
 		cellSizeZ(sheetScaleFactor), attrArray(attrArrayIn),
-		rayFunction(0), stepSize(0.9)
+		rayFunction(0), rayFunctionParameter(100), stepSize(0.9)
 {
 	if (numInstances == 1)
 		// This is the first one created; lookup extra variables
@@ -52,6 +53,7 @@ void VolumeVisualizer::fetchGLSLVariableLocations()
 		ppuLoc_cellSizeY = ppUniformLocation(shaderProgram, "cellSizeY");
 		ppuLoc_cellSizeZ = ppUniformLocation(shaderProgram, "cellSizeZ");
 		ppuLoc_rayFunction = ppUniformLocation(shaderProgram, "rayFunction");
+		ppuLoc_rayFunctionParameter = ppUniformLocation(shaderProgram, "rayFunctionParameter");
 		ppuLoc_stepSize = ppUniformLocation(shaderProgram, "stepSize");
 	}
 }
@@ -64,7 +66,26 @@ void VolumeVisualizer::getMCBoundingBox(double* xyzLimits) const
 void VolumeVisualizer::handleCommand(unsigned char key, double ldsX, double ldsY)
 {
 	bool handled = false;
-
+	if (key == 'c'){
+    if(++rayFunction >= 3){
+			rayFunction = 0;
+		}
+		handled = true;
+	}
+	else if (key == '+' || key == '=') //increase rayFunctionParameter
+	{
+		if(++rayFunctionParameter >= 255){
+			rayFunctionParameter = 0;
+		}
+		handled = true;
+	}
+	else if(key == '-')//decrease rayFunctionParameter
+	{
+		if(--rayFunctionParameter <= 0){
+			rayFunctionParameter = 255;
+		}
+		handled = true;
+	}
 	// Handle events you want, setting "handled" to true if you handle one...
 
 	if (!handled)
@@ -110,6 +131,7 @@ void VolumeVisualizer::render()
 	glUniform1f(ppuLoc_cellSizeY, cellSizeY);
 	glUniform1f(ppuLoc_cellSizeZ, cellSizeZ);
 	glUniform1i(ppuLoc_rayFunction, rayFunction);
+	glUniform1i(ppuLoc_rayFunctionParameter, rayFunctionParameter);
 	glUniform1f(ppuLoc_stepSize, stepSize);
 
 	voxelGridCubeMV->render();

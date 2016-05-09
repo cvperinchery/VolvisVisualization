@@ -44,8 +44,21 @@ int loc(int r, int c, int s)
 
 float getVal(in int ri, in float rf, in int ci, in float cf, in int si, in float sf)
 {
-	// This should do trilinear interpolation. As a placeholder:
+	// This should do trilinear interpolation
 	return voxelGrid.g[loc(ri, ci, si)];
+
+	//trilinear interpolation is very slow
+	//float x00 = (1-rf)*voxelGrid.g[loc(ri, ci, si)] + rf*voxelGrid.g[loc(ri+1, ci, si)];
+	//float x01 = (1-rf)*voxelGrid.g[loc(ri, ci, si+1)] + rf*voxelGrid.g[loc(ri+1, ci, si+1)];
+	//float x10 = (1-rf)*voxelGrid.g[loc(ri, ci+1, si)] + rf*voxelGrid.g[loc(ri+1, ci+1, si)];
+	//float x11 = (1-rf)*voxelGrid.g[loc(ri, ci+1, si+1)] + rf*voxelGrid.g[loc(ri+1, ci+1, si+1)];
+
+	//float x0 = (1-cf)*x00 + cf*x10;
+	//float x1 = (1-cf)*x01 + cf*x11;
+
+	//float x = (1-sf)*x0 + sf*x1;
+
+	//return x;
 }
 
 bool mcToRCS(in vec3 mcPoint, out int ri, out float rf,
@@ -70,10 +83,22 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 	int ri, ci, si;
 	float rf, cf, sf;
 	float v, maxVal = 0;
-	while (mcToRCS(mcPoint, ri, rf, ci, cf, si, sf))
+	bool bin = false;
+	vec4 black = vec4(1.0, 1.0, 1.0, 1.0);
+	vec4 white = vec4(0.0, 0.0, 0.0, 1.0);
+
+	while (mcToRCS(mcPoint, ri, rf, ci, cf, si, sf)) //while in the space
 	{
-		v = getVal(ri, rf, ci, cf, si, sf);
-		if (rayFunction == 2)
+		v = getVal(ri, rf, ci, cf, si, sf); //get voxel value at stepping point
+		if (rayFunction == 1)
+		{
+			// BEGIN BINARY, part 1
+			if(v >= rayFunctionParameter){
+				bin = true;
+				break;
+			}
+		} // END BINARY, part 1
+		else if (rayFunction == 2)
 		{
 			// BEGIN "MAX", part 1
 			if (v > maxVal)
@@ -83,7 +108,15 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 		mcPoint += stepSize*mcLineOfSight;
 	}
 	vec4 colorToReturn;
-	if (rayFunction == 2)
+	if(rayFunction == 1){ //BEGIN BINARY, part 2
+		if(bin){
+			colorToReturn = black;
+		}
+		else{
+			colorToReturn = white;
+		}
+	} // END BINARY, part 2
+	else if (rayFunction == 2)
 	{
 		// BEGIN "MAX", part 2
 		v = maxVal / 255.0;
@@ -110,4 +143,3 @@ void main()
 		fragmentColor = traceRay(pvaIn.mcPosition, mcLineOfSight);
 	}
 }
-
