@@ -45,7 +45,7 @@ void initializeViewingInformation(Controller& c)
 	ModelView::setProjection(ORTHOGONAL);
 }
 
-bool getData(const char* configFileName, int& nRows, int& nCols, int& nSheets,
+bool getData(const char* configFileName, int lineNum, int& nRows, int& nCols, int& nSheets,
 	double& rowScaleFactor, double& colScaleFactor, double& sheetScaleFactor,
 	int*& voxels)
 {
@@ -55,10 +55,14 @@ bool getData(const char* configFileName, int& nRows, int& nCols, int& nSheets,
 		std::cerr << "Could not open " << configFileName << " for reading.\n";
 		return false;
 	}
-	config >> nRows >> nCols >> nSheets;
-	config >> rowScaleFactor >> colScaleFactor >> sheetScaleFactor;
-	std::string voxelFileName;
-	config >> voxelFileName;
+	std::string line;
+	for (int i=1; i<lineNum; i++ ){
+		std::getline(config, line);
+	}
+		config >> nRows >> nCols >> nSheets;
+		config >> rowScaleFactor >> colScaleFactor >> sheetScaleFactor;
+		std::string voxelFileName;
+		config >> voxelFileName;
 
 	std::ifstream voxelFile(voxelFileName.c_str());
 	if (!voxelFile.good())
@@ -78,16 +82,20 @@ bool getData(const char* configFileName, int& nRows, int& nCols, int& nSheets,
 
 int main(int argc, char* argv[])
 {
-	if (argc != 2)
+	if (argc != 3)
 	{
-		std::cerr << "Usage: " << argv[0]<< " configFile\n";
+		std::cerr << "Usage: " << argv[0]<< " configFile lineNum\n";
 		return 0;
 	}
-
+	int lineNum = atoi(argv[2]);
+	if(lineNum < 0 || lineNum > 16)
+	{
+		std::cerr << "lineNum must be between 0 and 16\n";
+	}
 	int nRows, nCols, nSheets;
 	double rowScaleFactor, colScaleFactor, sheetScaleFactor;
 	int* voxels;
-	if (getData(argv[1], nRows, nCols, nSheets,
+	if (getData(argv[1], lineNum, nRows, nCols, nSheets,
 		rowScaleFactor, colScaleFactor, sheetScaleFactor, voxels))
 	{
 		GLFWController c("Voxel Grid", MVC_USE_DEPTH_BIT);

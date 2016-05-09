@@ -138,18 +138,18 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 		colorToReturn = vec4(v, v, v, 1.0);
 		// END "MAX", part 2
 	}
-	else if (rayFunction == 3)
+	else if (rayFunction == 3) // AVERAGE
 	{
 		float avg = total / count;
 		avg = avg / 255.0;
 		colorToReturn = vec4(avg, avg, avg, 1.0);
 	}
-	else if (rayFunction == 4)
+	else if (rayFunction == 4) // SUM
 	{
 		float sum = total /(150*255);
 		colorToReturn = vec4(sum, sum, sum, 1.0);
 	}
-	else if (rayFunction == 5){
+	else if (rayFunction == 5){ // RGBA CUM
 		colorToReturn = rgbacum;// / rgbacum.w;
 	}
 	return colorToReturn;

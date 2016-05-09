@@ -1,6 +1,4 @@
 256 256 256 1.0 1.0 1.0 /home/miller/Data/volvisdata/8bpv/skull.raw
-
-
 256 256 256 1.0 1.0 1.0 /home/miller/Data/volvisdata/8bpv/aneurism.raw
 256 256 178 1.0 1.0 1.0 /home/miller/Data/volvisdata/8bpv/BostonTeapot.raw
 256 256 256 1.0 1.0 1.0 /home/miller/Data/volvisdata/8bpv/bonsai.raw
