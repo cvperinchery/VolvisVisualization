@@ -72,6 +72,36 @@ void VolumeVisualizer::handleCommand(unsigned char key, double ldsX, double ldsY
 		}
 		handled = true;
 	}
+	else if(key == '0'){
+		rayFunction = 0;
+	}
+	else if(key == '1'){
+		rayFunction = 1;
+	}
+	else if(key == '2'){
+		rayFunction = 2;
+	}
+	else if(key == '3'){
+		rayFunction = 3;
+	}
+	else if(key == '4'){
+		rayFunction = 4;
+	}
+	else if(key == '5'){
+		rayFunction = 5;
+	}
+	else if(key == '6'){
+		rayFunction = 6;
+	}
+	else if(key == '7'){
+		rayFunction = 7;
+	}
+	else if(key == '8'){
+		rayFunction = 8;
+	}
+	else if(key == '9'){
+		rayFunction = 9;
+	}
 	else if (key == '+' || key == '=') //increase rayFunctionParameter
 	{
 		if(++rayFunctionParameter >= 255){

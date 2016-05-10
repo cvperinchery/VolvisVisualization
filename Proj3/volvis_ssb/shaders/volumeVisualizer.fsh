@@ -44,8 +44,13 @@ int loc(int r, int c, int s)
 
 vec4 transferFunction(in float value)
 {
-
-	vec4 rgba = vec4(value/255.0, value/255.0, value/255.0, value/255.0);
+	float alpha = 0.0;
+	if(value > 128){
+		alpha = .2;
+	} else {
+		alpha = .1;
+	}
+	vec4 rgba = vec4(value/255.0, value/255.0, value/255.0, alpha);
 	return rgba;
 }
 
@@ -92,6 +97,9 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 	float v, maxVal, count, total = 0;
 	vec4 rgbacur, rgbacum = vec4(0.0, 0.0, 0.0, 0.0);
 	bool bin = false;
+	bool color1 = false;
+	bool color2 = false;
+	bool color3 = false;
 	vec4 black = vec4(1.0, 1.0, 1.0, 1.0);
 	vec4 white = vec4(0.0, 0.0, 0.0, 1.0);
 
@@ -121,6 +129,20 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 			float ads = rgbacur.w * stepSize;
 			rgbacum = rgbacum + (1-rgbacum.w)*vec4(ads*rgbacur.xyz, rgbacur.w);
 		}
+		else if (rayFunction == 9){
+			if(v >= 200){
+				color2 = true;
+				break;
+			}
+			// if(v >= 100) {
+			// 	color3 = true;
+			// 	break;
+			// }
+			if(v >= rayFunctionParameter){
+				color1 = true;
+				break;
+			}
+		}
 		mcPoint += stepSize*mcLineOfSight;
 	}
 	vec4 colorToReturn;
@@ -146,11 +168,33 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 	}
 	else if (rayFunction == 4) // SUM
 	{
-		float sum = total /(150*255);
+		float sum = total /(50*255);
 		colorToReturn = vec4(sum, sum, sum, 1.0);
 	}
 	else if (rayFunction == 5){ // RGBA CUM
 		colorToReturn = rgbacum / rgbacum.w;
+	}
+	else if (rayFunction == 6){
+		//colorToReturn = rgbacum + (1-rgbacum.w)*vec4()
+	}
+	else if (rayFunction == 9){
+		if(color1){
+			v = v/255.0;
+			float r = (.5*v) + .5;
+			float g = (.8*v) + .15;
+			float b = (.9*v);
+			colorToReturn = vec4(r, g, b, 1.0);
+		} else if(color2){
+			colorToReturn = vec4(.94, .94, .94, 1.0);
+		// } else if(color3){
+		// 	float r = 1.0;
+		// 	float g = 1.0-(.8*v);
+		// 	float b = .92 - (.9*v);
+		//
+		// 	colorToReturn = vec4(r, g, b, 1.0);
+		} else {
+			colorToReturn = white;
+		}
 	}
 	return colorToReturn;
 }
