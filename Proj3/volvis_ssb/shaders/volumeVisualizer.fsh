@@ -119,7 +119,7 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 		else if (rayFunction == 5){
 			rgbacur = transferFunction(v);
 			float ads = rgbacur.w * stepSize;
-			rgbacum = rgbacum + (1-rgbacum.w)*ads*rgbacur;
+			rgbacum = rgbacum + (1-rgbacum.w)*vec4(ads*rgbacur.xyz, rgbacur.w);
 		}
 		mcPoint += stepSize*mcLineOfSight;
 	}
@@ -150,7 +150,7 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 		colorToReturn = vec4(sum, sum, sum, 1.0);
 	}
 	else if (rayFunction == 5){ // RGBA CUM
-		colorToReturn = rgbacum;// / rgbacum.w;
+		colorToReturn = rgbacum / rgbacum.w;
 	}
 	return colorToReturn;
 }

@@ -67,7 +67,7 @@ void VolumeVisualizer::handleCommand(unsigned char key, double ldsX, double ldsY
 {
 	bool handled = false;
 	if (key == 'c'){
-    if(++rayFunction >= 6){
+		if(++rayFunction >= 6){
 			rayFunction = 0;
 		}
 		handled = true;
@@ -131,7 +131,7 @@ void VolumeVisualizer::render()
 	glUniform1f(ppuLoc_cellSizeY, cellSizeY);
 	glUniform1f(ppuLoc_cellSizeZ, cellSizeZ);
 	glUniform1i(ppuLoc_rayFunction, rayFunction);
-	glUniform1i(ppuLoc_rayFunctionParameter, rayFunctionParameter);
+	glUniform1f(ppuLoc_rayFunctionParameter, rayFunctionParameter);
 	glUniform1f(ppuLoc_stepSize, stepSize);
 
 	voxelGridCubeMV->render();
