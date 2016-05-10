@@ -13,6 +13,9 @@ GLint VolumeVisualizer::ppuLoc_cellSizeY = -2;
 GLint VolumeVisualizer::ppuLoc_cellSizeZ = -2;
 GLint VolumeVisualizer::ppuLoc_rayFunction = -2;
 GLint VolumeVisualizer::ppuLoc_rayFunctionParameter = -2;
+GLint VolumeVisualizer::ppuLoc_bgr = -2;
+GLint VolumeVisualizer::ppuLoc_bgg = -2;
+GLint VolumeVisualizer::ppuLoc_bgb = -2;
 GLint VolumeVisualizer::ppuLoc_stepSize = -2;
 
 VolumeVisualizer::VolumeVisualizer(int nRowsIn, int nColsIn, int nSheetsIn,
@@ -21,7 +24,7 @@ VolumeVisualizer::VolumeVisualizer(int nRowsIn, int nColsIn, int nSheetsIn,
 		nRows(nRowsIn), nCols(nColsIn), nSheets(nSheetsIn),
 		cellSizeX(colScaleFactor), cellSizeY(rowScaleFactor),
 		cellSizeZ(sheetScaleFactor), attrArray(attrArrayIn),
-		rayFunction(0), rayFunctionParameter(100), stepSize(0.9)
+		rayFunction(0), rayFunctionParameter(100), bgr(1.0), bgg(1.0), bgb(1.0), stepSize(0.9)
 {
 	if (numInstances == 1)
 		// This is the first one created; lookup extra variables
@@ -54,6 +57,9 @@ void VolumeVisualizer::fetchGLSLVariableLocations()
 		ppuLoc_cellSizeZ = ppUniformLocation(shaderProgram, "cellSizeZ");
 		ppuLoc_rayFunction = ppUniformLocation(shaderProgram, "rayFunction");
 		ppuLoc_rayFunctionParameter = ppUniformLocation(shaderProgram, "rayFunctionParameter");
+		ppuLoc_bgr = ppUniformLocation(shaderProgram, "bgr");
+		ppuLoc_bgg = ppUniformLocation(shaderProgram, "bgg");
+		ppuLoc_bgb = ppUniformLocation(shaderProgram, "bgb");
 		ppuLoc_stepSize = ppUniformLocation(shaderProgram, "stepSize");
 	}
 }
@@ -82,13 +88,6 @@ void VolumeVisualizer::handleCommand(unsigned char key, double ldsX, double ldsY
 		rayFunction = 2;
 	}
 	else if(key == '3'){
-		rayFunction = 3;
-	}
-	else if(key == '4'){
-		rayFunction = 4;
-	}
-	else if(key == '5'){
-		rayFunction = 5;
 	}
 	else if(key == '6'){
 		rayFunction = 6;
@@ -101,6 +100,14 @@ void VolumeVisualizer::handleCommand(unsigned char key, double ldsX, double ldsY
 	}
 	else if(key == '9'){
 		rayFunction = 9;
+	}
+	else if(key == 'b'){//change background color
+		if(bgr == 1.0){
+			bgr = .87;
+			bgg = .79;
+			bgb = .89;
+			glClearColor(bgr, bgg, bgb, 1.0);
+		}
 	}
 	else if (key == '+' || key == '=') //increase rayFunctionParameter
 	{
@@ -162,6 +169,9 @@ void VolumeVisualizer::render()
 	glUniform1f(ppuLoc_cellSizeZ, cellSizeZ);
 	glUniform1i(ppuLoc_rayFunction, rayFunction);
 	glUniform1f(ppuLoc_rayFunctionParameter, rayFunctionParameter);
+	glUniform1f(ppuLoc_bgr, bgr);
+	glUniform1f(ppuLoc_bgg, bgg);
+	glUniform1f(ppuLoc_bgb, bgb);
 	glUniform1f(ppuLoc_stepSize, stepSize);
 
 	voxelGridCubeMV->render();

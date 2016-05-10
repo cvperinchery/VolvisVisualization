@@ -22,7 +22,9 @@ uniform mat4 mc_ec;
 // 8: INFER_ISOSURFACE_GRADIENT_SIZE_AT_LEAST
 uniform int rayFunction = 0;
 uniform float rayFunctionParameter = 100; // some ray functions need a parameter
-
+uniform float bgr = 1.0;
+uniform float bgg = 1.0;
+uniform float bgb = 1.0;
 uniform float stepSize = 0.9; // voxels
 uniform float cellSizeX = 1.0, cellSizeY = 1.0, cellSizeZ = 1.0;
 
@@ -47,6 +49,8 @@ vec4 transferFunction(in float value)
 	float alpha = 0.0;
 	if(value > 128){
 		alpha = .2;
+	} else if (value < 30) {
+		alpha = 0.0;
 	} else {
 		alpha = .1;
 	}
@@ -124,7 +128,7 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 			count ++;
 			total = total + v;
 		}
-		else if (rayFunction == 5){
+		else if (rayFunction == 5 || rayFunction == 6){
 			rgbacur = transferFunction(v);
 			float ads = rgbacur.w * stepSize;
 			rgbacum = rgbacum + (1-rgbacum.w)*vec4(ads*rgbacur.xyz, rgbacur.w);
@@ -171,11 +175,11 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 		float sum = total /(50*255);
 		colorToReturn = vec4(sum, sum, sum, 1.0);
 	}
-	else if (rayFunction == 5){ // RGBA CUM
+	else if (rayFunction == 5){ // RGBA ACCUMULATION
 		colorToReturn = rgbacum / rgbacum.w;
 	}
-	else if (rayFunction == 6){
-		//colorToReturn = rgbacum + (1-rgbacum.w)*vec4()
+	else if (rayFunction == 6){ //RGBA ACUUMULATIVE + BACKGROUND
+		colorToReturn = rgbacum + (1-rgbacum.w)*vec4(bgr, bgg, bgb, 1.0);
 	}
 	else if (rayFunction == 9){
 		if(color1){
