@@ -38,13 +38,36 @@ private:
 	float bgr;
 	float bgg;
 	float bgb;
+	float c1r;
+	float c2r;
+	float c3r;
+	float c1g;
+	float c2g;
+	float c3g;
+	float c1b;
+	float c2b;
+	float c3b;
+	float c1a;
+	float c2a;
+	float c3a;
+	float colorMap12;
+	float colorMap23;
 	float stepSize;
+	float* bgcolor;
+	int bgcount;
+	float* color;
+	int colorCount;
 
 	// PPUs for voxel grid
 	static GLint ppuLoc_nRows, ppuLoc_nCols, ppuLoc_nSheets;
 	static GLint ppuLoc_cellSizeX, ppuLoc_cellSizeY, ppuLoc_cellSizeZ;
 	// PPUs for rendering options
-	static GLint ppuLoc_rayFunction, ppuLoc_rayFunctionParameter, ppuLoc_bgr, ppuLoc_bgg, ppuLoc_bgb, ppuLoc_stepSize;
+	static GLint ppuLoc_rayFunction, ppuLoc_rayFunctionParameter, ppuLoc_bgr, ppuLoc_bgg, ppuLoc_bgb,
+	ppuLoc_colorMap12, ppuLoc_colorMap23,
+	ppuLoc_c1a,	ppuLoc_c2a,	ppuLoc_c3a,
+	ppuLoc_c1r,	ppuLoc_c2r,	ppuLoc_c3r,
+	ppuLoc_c1g,	ppuLoc_c2g,	ppuLoc_c3g,
+	ppuLoc_c1b,	ppuLoc_c2b,	ppuLoc_c3b, ppuLoc_stepSize;
 
 	static void fetchGLSLVariableLocations();
 

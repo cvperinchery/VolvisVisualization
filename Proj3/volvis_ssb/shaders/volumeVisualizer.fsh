@@ -25,6 +25,20 @@ uniform float rayFunctionParameter = 100; // some ray functions need a parameter
 uniform float bgr = 1.0;
 uniform float bgg = 1.0;
 uniform float bgb = 1.0;
+uniform float colorMap12 = 85;
+uniform float colorMap23 = 170;
+uniform float c1a = 1.0;
+uniform float c2a = 1.0;
+uniform float c3a = 1.0;
+uniform float c1r = 1.0;
+uniform float c2r = 1.0;
+uniform float c3r = 1.0;
+uniform float c1g = 1.0;
+uniform float c2g = 1.0;
+uniform float c3g = 1.0;
+uniform float c1b = 1.0;
+uniform float c2b = 1.0;
+uniform float c3b = 1.0;
 uniform float stepSize = 0.9; // voxels
 uniform float cellSizeX = 1.0, cellSizeY = 1.0, cellSizeZ = 1.0;
 
@@ -55,6 +69,22 @@ vec4 transferFunction(in float value)
 		alpha = .1;
 	}
 	vec4 rgba = vec4(value/255.0, value/255.0, value/255.0, alpha);
+	return rgba;
+}
+
+vec4 colorTransferFunction(in float value)
+{
+	vec4 rgba;
+	if(value > colorMap23){ //color 3
+		rgba = vec4(c3r, c3g, c3b, c3a);
+		//rgba = vec4(.46, .44, .70, 0.1);
+	} else if (value > colorMap12){ // color 2
+		rgba = vec4(c2r, c2g, c2b, c2a);
+		//rgba = vec4(.1, .62, .47, 0.2);
+	} else{ // color 1
+		rgba = vec4(c1r, c1g, c1b, c1a);
+		//rgba = vec4(.46, .44, .70, 0.0);
+	}
 	return rgba;
 }
 
@@ -133,6 +163,11 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 			float ads = rgbacur.w * stepSize;
 			rgbacum = rgbacum + (1-rgbacum.w)*vec4(ads*rgbacur.xyz, rgbacur.w);
 		}
+		else if (rayFunction == 7){
+			rgbacur = colorTransferFunction(v);
+			float ads = rgbacur.w * stepSize;
+			rgbacum = rgbacum + (1-rgbacum.w)*vec4(ads*rgbacur.xyz, rgbacur.w);
+		}
 		else if (rayFunction == 9){
 			if(v >= 200){
 				color2 = true;
@@ -175,7 +210,7 @@ vec4 traceRay(in vec3 mcPoint, in vec3 mcLineOfSight)
 		float sum = total /(50*255);
 		colorToReturn = vec4(sum, sum, sum, 1.0);
 	}
-	else if (rayFunction == 5){ // RGBA ACCUMULATION
+	else if (rayFunction == 5 || rayFunction == 7){ // RGBA ACCUMULATION
 		colorToReturn = rgbacum / rgbacum.w;
 	}
 	else if (rayFunction == 6){ //RGBA ACUUMULATIVE + BACKGROUND
